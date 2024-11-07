@@ -8,25 +8,19 @@ import shutil
 
 
 url = 'http://localhost:8080/textract'
-f = '/home/florian/projects/git/textract-docker/client/test.pptx'
+file_path = './test.pptx'
 
-with open(f, 'rb') as open_file:
-    byte_content = open_file.read()
-    base64_bytes = b64encode(byte_content)
-    base64_string = base64_bytes.decode('utf-8')
-    raw_data = {
-        "data": base64_string,
-        "file_type": f.split('.')[-1]
-        }
-
-#print(raw_data)
-
-
-
-r = requests.post(url, json=raw_data)
+# create a POST request to upload the file without converting it to base64
+files = {'file': open(file_path, 'rb')}
+r = requests.post(url, files=files)
 print(r)
-print(r.text)
+print("Text:" + r.text)
+#get the text property from the json response
+
+
+print(r.json.text)
 print(r.json)
+
 
 
 

@@ -28,16 +28,50 @@ A simple docker image to serve [textract](https://textract.readthedocs.io/) as a
 .xlsx via xlrd  
 .xls via xlrd  
 
-## Build + Run
+## Build + Run 
 
+### Docker Compose
+```
+docker compose up
+```
+
+### Docker
 ```
 docker build -t textract .
 docker run -t -p 8080:8080 -e PORT=8080 textract .
 ```
 
+
+
+
 ## Usage
 
-See `client/client.py` for an example.
+### Example Usage With Curl
+
+Command:
+```bash
+curl --request POST \
+  --url 'http://localhost:8080/textract' \
+  --header 'Content-Type: multipart/form-data' \
+  --form 'file=@C:\Users\user.name\Document\SampleFile.txt'
+```
+
+Repsonse Body:
+```json
+{
+	"filename": "SampleFile.txt",
+	"file_content_type": "text/plain",
+	"file_size": 1380,
+	"file_extension": "txt",
+	"text_hash": "5e684616a6b793c6689408f8fd1dc894862f0f972929144d433da409a4587764",
+	"text_length": 1372,
+	"duration": 0.0,
+	"text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa..."
+}
+```
+
+### Example Usage With Python Client
+See `client/client.py` for an example uploading a file converted to base64 format.
 
 Request json:
 ```
@@ -53,3 +87,7 @@ Response json:
     "text": <extracted text utf-8 encoded>
 }
 ```
+
+
+
+
